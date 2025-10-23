@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Gameshow - Skor Saja</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="score-page"> 
+    
+    <div class="top-left-controls">
+        <a href="index.html" id="back-button" title="Kembali ke Papan Tema">&laquo; Kembali</a>
+    </div>
+
+    <div id="full-score-board">
+        <h1>LIVE SCORE</h1>
+
+        <div class="score-display-row"> 
+        
+            <div class="score-container team-1">
+                <span class="team-name">TIM 1</span>
+                <input type="number" class="score-input" id="input-score-1" value="0" onchange="updateScore('score-1')">
+            </div>
+
+            <div class="score-container team-2">
+                <span class="team-name">TIM 2</span>
+                <input type="number" class="score-input" id="input-score-2" value="0" onchange="updateScore('score-2')">
+            </div>
+            
+            <div class="score-container team-3">
+                <span class="team-name">TIM 3</span>
+                <input type="number" class="score-input" id="input-score-3" value="0" onchange="updateScore('score-3')">
+            </div>
+            
+            <div class="score-container team-4">
+                <span class="team-name">TIM 4</span>
+                <input type="number" class="score-input" id="input-score-4" value="0" onchange="updateScore('score-4')">
+            </div>
+            
+            <div class="score-container team-5">
+                <span class="team-name">TIM 5</span>
+                <input type="number" class="score-input" id="input-score-5" value="0" onchange="updateScore('score-5')">
+            </div>
+            
+        </div>
+        
+    </div>
+
+    <script>
+        // ... (Fungsi updateScore dan DOMContentLoaded di sini) ...
+        function updateScore(scoreKey) {
+            const inputElement = document.getElementById(`input-${scoreKey}`);
+            const newScore = parseInt(inputElement.value);
+
+            if (!isNaN(newScore)) {
+                let gameScores = JSON.parse(localStorage.getItem('gameScores')) || {};
+                gameScores[scoreKey] = newScore;
+                localStorage.setItem('gameScores', JSON.stringify(gameScores));
+
+                inputElement.style.borderColor = '#FFD700';
+                setTimeout(() => inputElement.style.borderColor = 'white', 500);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const scores = JSON.parse(localStorage.getItem('gameScores')) || {
+                'score-1': 0, 'score-2': 0, 'score-3': 0, 'score-4': 0, 'score-5': 0
+            };
+
+            for (let i = 1; i <= 5; i++) {
+                const inputElement = document.getElementById(`input-score-${i}`);
+                if (inputElement) {
+                    inputElement.value = scores[`score-${i}`];
+                    inputElement.style.borderColor = 'white';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

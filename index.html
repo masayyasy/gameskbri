@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Gameshow - Papan Tema</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="top-right-controls">
+        <button id="reset-button" onclick="resetThemes()" title="Reset Tema">&#x21BB;</button> <a href="skor.html" id="next-button" title="Lanjutkan">&#x2794;</a> </div>
+
+    <div id="game-board">
+        <div class="theme-grid">
+            <div class="theme-box" data-tema="ANIME">ANIME</div>
+            <div class="theme-box" data-tema="FOTOGRAFI & VIDEOGRAFI">FOTOGRAFI & VIDEOGRAFI</div>
+            <div class="theme-box" data-tema="OTOMOTIF">OTOMOTIF</div>
+            
+            <div class="theme-box" data-tema="TATA BUSANA">TATA BUSANA</div>
+            <div class="theme-box" data-tema="OLAHRAGA">OLAHRAGA</div>
+            <div class="theme-box" data-tema="KULINER">KULINER</div>
+
+            <div class="theme-box" data-tema="FRAGRANCE SCIENCE">FRAGRANCE SCIENCE</div>
+            <div class="theme-box" data-tema="FAUNA">FAUNA</div>
+            <div class="theme-box" data-tema="ILMU TANAH">ILMU TANAH</div>
+        </div>
+    </div>
+
+    <div id="live-score-bar">
+        <div class="team-score team-1">Tim 1: 
+            <input type="number" class="live-score-input" id="input-score-1" value="0" onchange="updateScore('score-1')">
+        </div>
+        <div class="team-score team-2">Tim 2: 
+            <input type="number" class="live-score-input" id="input-score-2" value="0" onchange="updateScore('score-2')">
+        </div>
+        <div class="team-score team-3">Tim 3: 
+            <input type="number" class="live-score-input" id="input-score-3" value="0" onchange="updateScore('score-3')">
+        </div>
+        <div class="team-score team-4">Tim 4: 
+            <input type="number" class="live-score-input" id="input-score-4" value="0" onchange="updateScore('score-4')">
+        </div>
+        <div class="team-score team-5">Tim 5: 
+            <input type="number" class="live-score-input" id="input-score-5" value="0" onchange="updateScore('score-5')">
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menyimpan skor saat input berubah (TIDAK BERUBAH)
+        function updateScore(scoreKey) {
+            const inputElement = document.getElementById(`input-${scoreKey}`);
+            const newScore = parseInt(inputElement.value);
+
+            if (!isNaN(newScore)) {
+                let gameScores = JSON.parse(localStorage.getItem('gameScores')) || {};
+                gameScores[scoreKey] = newScore;
+                localStorage.setItem('gameScores', JSON.stringify(gameScores));
+
+                inputElement.style.borderColor = '#2ECC71'; 
+                setTimeout(() => inputElement.style.borderColor = 'white', 500);
+            }
+        }
+        
+        // Fungsi Reset Tema (TIDAK BERUBAH)
+        function resetThemes() {
+            if (confirm('Yakin ingin mereset semua pilihan tema? Ini akan mengembalikan semua kotak menjadi kuning.')) {
+                localStorage.removeItem('chosenThemes');
+                document.querySelectorAll('.theme-box').forEach(box => {
+                    box.classList.remove('chosen');
+                });
+                alert('Pilihan tema telah direset!');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeBoxes = document.querySelectorAll('.theme-box');
+            
+            // 1. Logika Tema (TIDAK BERUBAH)
+            const chosenThemes = JSON.parse(localStorage.getItem('chosenThemes')) || {};
+            themeBoxes.forEach(box => {
+                const themeName = box.getAttribute('data-tema');
+                
+                if (chosenThemes[themeName]) {
+                    box.classList.add('chosen');
+                }
+                
+                box.addEventListener('click', function() {
+                    if (!this.classList.contains('chosen')) {
+                        this.classList.add('chosen');
+                        chosenThemes[themeName] = true;
+                        localStorage.setItem('chosenThemes', JSON.stringify(chosenThemes));
+                    }
+                });
+            });
+
+            // 2. Logika Skor (TIDAK BERUBAH)
+            const scores = JSON.parse(localStorage.getItem('gameScores')) || {
+                'score-1': 0, 'score-2': 0, 'score-3': 0, 'score-4': 0, 'score-5': 0
+            };
+
+            for (const [key, score] of Object.entries(scores)) {
+                const inputElement = document.getElementById(`input-${key}`);
+                if (inputElement) {
+                    inputElement.value = score;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
