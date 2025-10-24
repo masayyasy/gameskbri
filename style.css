@@ -265,3 +265,37 @@ body.score-page {
     background-color: rgba(255, 255, 255, 0.15);
     outline: none;
 }
+
+/* --- Tambahkan di bagian C (INDEX.HTML - Live Score Bar) --- */
+
+.live-name-input {
+    width: 60px; /* Lebar untuk nama pendek */
+    padding: 2px 5px;
+    margin-right: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: right;
+    border: 1px solid white;
+    border-radius: 3px;
+    color: white;
+    background-color: transparent;
+    -webkit-text-fill-color: white;
+    box-sizing: border-box; /* Agar padding tidak menambah lebar total */
+}
+
+/* --- Tambahkan di bagian E (SCORE-ONLY.HTML - Kotak Besar) --- */
+
+.score-container .team-name-input {
+    /* Menggantikan .team-name span */
+    width: 90%; /* Mengisi lebar kontainer tim */
+    text-align: center;
+    font-size: 2.5em; 
+    font-weight: bold;
+    color: white;
+    background-color: transparent;
+    border: 2px solid white; /* Border samar */
+    border-radius: 8px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
