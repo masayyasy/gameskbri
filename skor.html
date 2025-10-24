@@ -17,27 +17,28 @@
         <div class="score-display-row"> 
         
             <div class="score-container team-1">
-                <span class="team-name">TIM 1</span>
+                <!-- GANTI DARI <span> MENJADI INPUT TEXT -->
+                <input type="text" class="team-name-input team-name" id="name-1" value="TIM 1" onchange="updateTeamName('name-1')">
                 <input type="number" class="score-input" id="input-score-1" value="0" onchange="updateScore('score-1')">
             </div>
 
             <div class="score-container team-2">
-                <span class="team-name">TIM 2</span>
+                <input type="text" class="team-name-input team-name" id="name-2" value="TIM 2" onchange="updateTeamName('name-2')">
                 <input type="number" class="score-input" id="input-score-2" value="0" onchange="updateScore('score-2')">
             </div>
             
             <div class="score-container team-3">
-                <span class="team-name">TIM 3</span>
+                <input type="text" class="team-name-input team-name" id="name-3" value="TIM 3" onchange="updateTeamName('name-3')">
                 <input type="number" class="score-input" id="input-score-3" value="0" onchange="updateScore('score-3')">
             </div>
             
             <div class="score-container team-4">
-                <span class="team-name">TIM 4</span>
+                <input type="text" class="team-name-input team-name" id="name-4" value="TIM 4" onchange="updateTeamName('name-4')">
                 <input type="number" class="score-input" id="input-score-4" value="0" onchange="updateScore('score-4')">
             </div>
             
             <div class="score-container team-5">
-                <span class="team-name">TIM 5</span>
+                <input type="text" class="team-name-input team-name" id="name-5" value="TIM 5" onchange="updateTeamName('name-5')">
                 <input type="number" class="score-input" id="input-score-5" value="0" onchange="updateScore('score-5')">
             </div>
             
@@ -46,31 +47,64 @@
     </div>
 
     <script>
-        // ... (Fungsi updateScore dan DOMContentLoaded di sini) ...
+        // Data Global untuk Skor dan Nama Tim
+        let gameScores = JSON.parse(localStorage.getItem('gameScores')) || {
+            'score-1': 0, 'score-2': 0, 'score-3': 0, 'score-4': 0, 'score-5': 0
+        };
+        let teamNames = JSON.parse(localStorage.getItem('teamNames')) || {
+            'name-1': 'TIM 1', 'name-2': 'TIM 2', 'name-3': 'TIM 3', 'name-4': 'TIM 4', 'name-5': 'TIM 5'
+        };
+
+        // FUNGSI BARU: Menyimpan Nama Tim
+        function updateTeamName(nameKey) {
+            const inputElement = document.getElementById(nameKey);
+            const newName = inputElement.value;
+
+            teamNames[nameKey] = newName;
+            localStorage.setItem('teamNames', JSON.stringify(teamNames));
+            
+            // Opsional: Perbarui nama tim di halaman index secara realtime (jika terbuka)
+            const indexNameElement = document.getElementById(`live-name-${nameKey.slice(-1)}`);
+            if (indexNameElement) {
+                indexNameElement.textContent = newName + ":";
+            }
+
+            // Feedback visual: Border berubah sebentar
+            inputElement.style.borderColor = '#2ECC71';
+            setTimeout(() => inputElement.style.borderColor = 'white', 500); 
+        }
+
+        // Fungsi untuk menyimpan skor saat input berubah (DIMODIFIKASI untuk konsistensi)
         function updateScore(scoreKey) {
             const inputElement = document.getElementById(`input-${scoreKey}`);
             const newScore = parseInt(inputElement.value);
 
             if (!isNaN(newScore)) {
-                let gameScores = JSON.parse(localStorage.getItem('gameScores')) || {};
                 gameScores[scoreKey] = newScore;
                 localStorage.setItem('gameScores', JSON.stringify(gameScores));
 
+                // Feedback visual
                 inputElement.style.borderColor = '#FFD700';
                 setTimeout(() => inputElement.style.borderColor = 'white', 500);
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const scores = JSON.parse(localStorage.getItem('gameScores')) || {
-                'score-1': 0, 'score-2': 0, 'score-3': 0, 'score-4': 0, 'score-5': 0
-            };
-
+            // Memuat Nama Tim dan Skor saat halaman dimuat
             for (let i = 1; i <= 5; i++) {
-                const inputElement = document.getElementById(`input-score-${i}`);
-                if (inputElement) {
-                    inputElement.value = scores[`score-${i}`];
-                    inputElement.style.borderColor = 'white';
+                // Muat Nama Tim
+                const nameKey = `name-${i}`;
+                const nameInput = document.getElementById(nameKey);
+                if (nameInput) {
+                    nameInput.value = teamNames[nameKey];
+                }
+
+                // Muat Skor
+                const scoreKey = `score-${i}`;
+                const scoreInput = document.getElementById(`input-score-${i}`);
+                if (scoreInput) {
+                    scoreInput.value = gameScores[scoreKey];
+                    scoreInput.style.borderColor = 'white';
                 }
             }
         });
