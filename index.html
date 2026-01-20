@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi ZNT Terintegrasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-image: url('bg.png');
+            /* Latar belakang yang diminta */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .regency-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .regency-card:hover {
+            transform: translateY(-15px);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Footer gaya Gemini: 1 baris, full ujung ke ujung */
+        .gemini-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            border-top: 1px solid #e5e7eb;
+            backdrop-filter: blur(8px);
+            box-sizing: border-box;
+        }
+
+        .footer-text {
+            font-size: 11px;
+            color: #71717a;
+            letter-spacing: -0.01em;
+        }
+
+        .footer-bold {
+            font-weight: 600;
+            color: #3f3f46;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="main-content">
+        <div class="mb-12">
+            <h1 class="text-4xl md:text-6xl font-bold text-black mb-4 drop-shadow-lg uppercase tracking-wider">
+                Sistem Informasi ZNT
+            </h1>
+            <p class="text-lg md:text-xl text-black-200 font-light drop-shadow-md">
+                Pilih Administrasi Wilayah untuk memulai proses penilaian data properti
+            </p>
+        </div>
+
+        <!-- Grid 4 Kolom untuk OKI, OI, 312, dan Umum -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl w-full px-4">
+
+            <!-- KOLOM KABUPATEN OGAN ILIR -->
+            <a href="oi-index.html" class="regency-card group rounded-3xl p-6 flex flex-col items-center shadow-2xl">
+                <div class="w-20 h-20 rounded-2xl flex items-center justify-center mb-4 shadow-inner group-hover:rotate-6 transition-transform relative overflow-hidden bg-cover bg-center"
+                    style="background-image: url('oki.png');">
+                    <!-- Overlay gelap agar teks OI tetap terbaca jelas -->
+                    <div class="absolute inset-0 bg-black/30"></div>
+                    <span class="text-white text-3xl font-bold italic relative z-10">OI</span>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Kab. Ogan Ilir</h2>
+                <p class="text-gray-500 text-xs mb-6 text-center">Penilaian zona nilai tanah wilayah administrasi Ogan
+                    Ilir</p>
+                <div
+                    class="py-2 px-4 bg-blue-600 text-white rounded-full text-xs font-semibold hover:bg-blue-700 transition-colors">
+                    Masuk &rarr;
+                </div>
+            </a>
+
+            <!-- KOLOM KABUPATEN OGAN KOMERING ILIR -->
+            <a href="oki-index.html" class="regency-card group rounded-3xl p-6 flex flex-col items-center shadow-2xl">
+                <div
+                    class="w-20 h-20 bg-emerald-600 rounded-2xl flex items-center justify-center mb-4 shadow-inner group-hover:-rotate-6 transition-transform">
+                    <span class="text-white text-3xl font-bold italic">OKI</span>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Kab. OKI</h2>
+                <p class="text-gray-500 text-xs mb-6 text-center">Penilaian zona nilai tanah wilayah administrasi OKI
+                </p>
+                <div
+                    class="py-2 px-4 bg-emerald-600 text-white rounded-full text-xs font-semibold hover:bg-emerald-700 transition-colors">
+                    Masuk &rarr;
+                </div>
+            </a>
+
+            <!-- KOLOM WILAYAH 312 -->
+            <a href="312-index.html" class="regency-card group rounded-3xl p-6 flex flex-col items-center shadow-2xl">
+                <div
+                    class="w-20 h-20 bg-indigo-600 rounded-2xl flex items-center justify-center mb-4 shadow-inner group-hover:rotate-12 transition-transform">
+                    <span class="text-white text-3xl font-bold italic">312</span>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Wilayah 312</h2>
+                <p class="text-gray-500 text-xs mb-6 text-center">Penilaian zona nilai tanah khusus wilayah kerja 312
+                </p>
+                <div
+                    class="py-2 px-4 bg-indigo-600 text-white rounded-full text-xs font-semibold hover:bg-indigo-700 transition-colors">
+                    Masuk &rarr;
+                </div>
+            </a>
+
+            <!-- KOLOM UMUM -->
+            <a href="umum-index.html" class="regency-card group rounded-3xl p-6 flex flex-col items-center shadow-2xl">
+                <div
+                    class="w-20 h-20 bg-slate-600 rounded-2xl flex items-center justify-center mb-4 shadow-inner group-hover:-rotate-12 transition-transform">
+                    <span class="text-white text-3xl font-bold italic">UM</span>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Umum</h2>
+                <p class="text-gray-500 text-xs mb-6 text-center">Akses penilaian data properti untuk kategori
+                    umum/publik</p>
+                <div
+                    class="py-2 px-4 bg-slate-600 text-white rounded-full text-xs font-semibold hover:bg-slate-700 transition-colors">
+                    Masuk &rarr;
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- FOOTER GAYA GEMINI: 1 baris full ujung ke ujung -->
+    <footer class="gemini-footer">
+        <div class="footer-text">
+            <span>© 2026</span>
+            <span class="footer-bold">by Susanto.</span>
+            <span>All rights reserved.</span>
+        </div>
+        <div class="footer-text flex gap-4">
+            <span class="opacity-60 uppercase tracking-widest text-[10px]">Proprietary Software System</span>
+            <span class="divider opacity-30">|</span>
+            <span>v1.0.0</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>

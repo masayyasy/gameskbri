@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analisis ZNT - Riwayat & Ekspor Excel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Library untuk ekspor Excel (.xlsx) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #historySidebar { transition: transform 0.3s ease-in-out; }
+    .history-item:hover { background-color: #f3f4f6; cursor: pointer; }
+    .active-history { border-left: 4px solid #2563eb; background-color: #eff6ff; }
+  </style>
+</head>
+
+<body class="formulir2 bg-gray-50">
+  <div class="navbar bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+    <div class="logo font-bold text-xl">Penilaian ZNT PBB P2 OGAN ILIR</div>
+    <ul class="flex gap-4">
+      <li><a href="oi-index.html" class="hover:underline">Input Data</a></li>
+      <li><a href="oi-formulir2.html" class="hover:underline">Formulir 2</a></li>
+      <li class="active font-bold underline"><a href="oi-analisis.html">Formulir 3</a></li>
+    </ul>
+  </div>
+
+  <div class="flex flex-col lg:flex-row min-h-screen">
+    <!-- Sidebar Riwayat -->
+    <div id="historySidebar" class="w-full lg:w-64 bg-white border-r border-gray-200 p-4">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-gray-700">Riwayat Analisis</h3>
+        <button id="clearHistoryBtn" class="text-xs text-red-500 hover:underline">Hapus Semua</button>
+      </div>
+      <div id="historyList" class="space-y-2 max-h-[500px] overflow-y-auto">
+        <p class="text-sm text-gray-400 text-center py-4 italic">Belum ada riwayat.</p>
+      </div>
+    </div>
+
+    <!-- Konten Utama -->
+    <div class="flex-1 p-6">
+      <div class="container mx-auto">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center text-uppercase">PILIH OBJEK DINILAI DAN OBJEK PEMBANDING</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <h3 class="font-bold text-blue-600 mb-4 border-b pb-2">Masukkan Objek yang Akan Dinilai</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-600">Alamat Objek</label>
+                <input type="text" id="alamatObjekInput" class="w-full border p-2 rounded-lg" placeholder="Contoh: Jl. Merdeka No. 1">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-600">Desa Alamat Objek</label>
+                <input type="text" id="alamatDesaInput" class="w-full border p-2 rounded-lg" placeholder="Masukkan desa...">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-600">Kode ZNT</label>
+                  <input type="text" id="kodeZNTInput" class="w-full border p-2 rounded-lg" placeholder="AA">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-600">Grade Lokasi</label>
+                  <select id="gradeInputDropdown" class="w-full border p-2 rounded-lg">
+                    <option value="">-- Pilih --</option>
+                    <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                    <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                    <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                    <option value="10">10</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <h3 class="font-bold text-green-600 mb-4 border-b pb-2">Masukkan Objek Pembanding</h3>
+            <div class="space-y-3">
+              <select id="alamat1Select" class="w-full border p-2 rounded-lg text-sm"><option value="">-- Pilih Alamat 1 --</option></select>
+              <select id="alamat2Select" class="w-full border p-2 rounded-lg text-sm"><option value="">-- Pilih Alamat 2 --</option></select>
+              <select id="alamat3Select" class="w-full border p-2 rounded-lg text-sm"><option value="">-- Pilih Alamat 3 --</option></select>
+              <select id="alamat4Select" class="w-full border p-2 rounded-lg text-sm"><option value="">-- Pilih Alamat 4 --</option></select>
+              <select id="alamat5Select" class="w-full border p-2 rounded-lg text-sm"><option value="">-- Pilih Alamat 5 --</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center mb-8">
+          <button id="showAnalysisBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-full shadow-lg transition-all transform hover:scale-105">
+            Analisis & Simpan
+          </button>
+        </div>
+
+        <!-- Judul Tabel Dinamis -->
+        <div id="tableHeaderInfo" class="hidden bg-white p-6 rounded-t-xl border-x border-t border-gray-200 shadow-sm">
+            <h4 class="text-xl font-bold text-blue-900 underline mb-4">HASIL ANALISIS PENILAIAN ZNT</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-8 text-sm text-gray-700">
+                <p class="flex justify-between border-b pb-1"><b>Alamat Objek yang di nilai:</b> <span id="displayAlamat" class="font-semibold text-blue-700">-</span></p>
+                <p class="flex justify-between border-b pb-1"><b>Desa Alamat Objek:</b> <span id="displayDesa" class="font-semibold text-blue-700">-</span></p>
+                <p class="flex justify-between border-b pb-1"><b>Kode ZNT:</b> <span id="displayZNT" class="font-semibold text-blue-700">-</span></p>
+                <p class="flex justify-between border-b pb-1"><b>Grade Lokasi:</b> <span id="displayGrade" class="font-semibold text-blue-700">-</span></p>
+            </div>
+        </div>
+
+        <!-- Tabel Hasil -->
+        <div class="bg-white rounded-b-xl shadow-md overflow-hidden border border-gray-200 mb-4">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left" id="analisisDataTable5">
+              <thead class="bg-gray-100 text-gray-700 uppercase text-[10px]">
+                <tr>
+                  <th class="px-4 py-3 border" rowspan="2">No</th>
+                  <th class="px-4 py-3 border" rowspan="2">Alamat Objek</th>
+                  <th class="px-4 py-3 border" rowspan="2">Blok/NOP</th>
+                  <th class="px-4 py-3 border" rowspan="2">ZNT</th>
+                  <th class="px-4 py-3 border" rowspan="2">Grade</th>
+                  <th class="px-4 py-3 border" rowspan="2">Nilai Wajar Bumi/M2</th>
+                  <th class="px-4 py-3 border text-center" colspan="4">Penyesuaian (%)</th>
+                  <th class="px-4 py-3 border" rowspan="2">Nilai Wajar Objek</th>
+                  <th class="px-4 py-3 border" rowspan="2">Rekonsiliasi</th>
+                </tr>
+                <tr class="bg-gray-50 text-[9px]">
+                  <th class="px-4 py-2 border">Lokasi (bak-grade)</th>
+                  <th class="px-4 py-2 border">Bentuk Tanah</th>
+                  <th class="px-4 py-2 border">Ketinggian</th>
+                  <th class="px-4 py-2 border">Kepemilikan</th>
+                </tr>
+              </thead>
+              <tbody id="analisisTableBody5" class="divide-y divide-gray-100 text-[11px]">
+                <tr><td colspan="12" class="px-6 py-10 text-center text-gray-400 italic">Data analisis akan muncul di sini...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tombol Export -->
+        <div class="flex justify-end">
+            <button id="exportAnalisisXLSX" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                <span>Ekspor ke Excel (.xlsx)</span>
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="gemini-footer">
+        <div class="footer-text">
+            <span>© 2026</span>
+            <span class="footer-bold">by Susanto..</span>
+            <span>All rights reserved.</span>
+        </div>
+        <div class="footer-text flex gap-4">
+            <span class="opacity-60 uppercase tracking-widest text-[10px]">Proprietary Software System</span>
+            <span class="divider opacity-30">|</span>
+            <span>v1.0.0</span>
+        </div>
+    </footer>
+
+  <script src="oi-script.js"></script>
+</body>
+</html>
